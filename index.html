@@ -5,158 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Double79 Game Mart</title>
 <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-        color: #fff;
-    }
+/* ===== Global ===== */
+body {
+    margin:0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+    color:#fff;
+}
+header {
+    background:linear-gradient(90deg,#ff4c4c,#ff0000);
+    padding:25px 20px;
+    text-align:center;
+    font-size:2.2em;
+    font-weight:bold;
+    letter-spacing:2px;
+    color:#fff;
+    box-shadow:0 5px 10px rgba(0,0,0,0.3);
+}
+.container {
+    padding:20px;
+    max-width:1200px;
+    margin:auto;
+}
+#gameList {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:25px;
+}
+.game-card {
+    background:#1c1c2c;
+    border-radius:15px;
+    padding:15px;
+    text-align:center;
+    transition:transform 0.3s,box-shadow 0.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,0.5);
+}
+.game-card:hover {
+    transform:translateY(-7px);
+    box-shadow:0 15px 25px rgba(255,76,76,0.5);
+}
+.game-card img {
+    width:100%;
+    height:150px;
+    object-fit:cover;
+    border-radius:10px;
+    margin-bottom:12px;
+    transition:transform 0.3s;
+}
+.game-card img:hover {transform:scale(1.05);}
+.game-card h3 {margin:0 0 5px 0;color:#ff4c4c;font-size:1.1em;}
+.game-card span {font-size:0.85em;color:#aaa;}
+.game-card a {
+    display:inline-block;
+    padding:10px 20px;
+    border-radius:10px;
+    background-color:#ff4c4c;
+    color:#fff;
+    text-decoration:none;
+    transition:background 0.3s;
+    margin-top:8px;
+}
+.game-card a:hover {background-color:#ff0000;}
 
-    header {
-        background: linear-gradient(90deg, #ff4c4c, #ff0000);
-        padding: 25px 20px;
-        text-align: center;
-        font-size: 2.2em;
-        font-weight: bold;
-        letter-spacing: 2px;
-        color: #fff;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-    }
+/* ===== Admin Panel ===== */
+.admin-section {
+    background:#14141f;
+    padding:25px;
+    margin-top:30px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(255,76,76,0.4);
+}
+.admin-section h2 {color:#ff4c4c;margin-top:0;}
+.admin-section input, .admin-section select, .admin-section button {
+    padding:12px;
+    margin:8px 0;
+    border-radius:5px;
+    border:none;
+    width:100%;
+    font-size:1em;
+}
+.admin-section button {
+    background-color:#ff4c4c;
+    color:#fff;
+    cursor:pointer;
+    width:auto;
+    margin-top:10px;
+}
+.admin-section button:hover {background-color:#ff0000;}
+.admin-game-item {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#2b2b3f;
+    padding:7px 12px;
+    border-radius:5px;
+    margin:5px 0;
+}
+.admin-game-item button {margin-left:5px;padding:5px 10px;font-size:0.9em;}
 
-    .container {
-        padding: 20px;
-        max-width: 1200px;
-        margin: auto;
-    }
-
-    #gameList {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 25px;
-    }
-
-    .game-card {
-        background: #1c1c2c;
-        border-radius: 15px;
-        padding: 15px;
-        text-align: center;
-        transition: transform 0.3s, box-shadow 0.3s;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    }
-
-    .game-card:hover {
-        transform: translateY(-7px);
-        box-shadow: 0 15px 25px rgba(255,76,76,0.5);
-    }
-
-    .game-card img {
-        width: 100%;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 10px;
-        margin-bottom: 12px;
-        transition: transform 0.3s;
-    }
-
-    .game-card img:hover {
-        transform: scale(1.05);
-    }
-
-    .game-card h3 {
-        margin: 0 0 5px 0;
-        color: #ff4c4c;
-        font-size: 1.1em;
-    }
-
-    .game-card span {
-        font-size: 0.85em;
-        color: #aaa;
-    }
-
-    .game-card a {
-        display: inline-block;
-        padding: 10px 20px;
-        border-radius: 10px;
-        background-color: #ff4c4c;
-        color: #fff;
-        text-decoration: none;
-        transition: background 0.3s;
-        margin-top: 8px;
-    }
-
-    .game-card a:hover {
-        background-color: #ff0000;
-    }
-
-    /* Admin Panel */
-    #adminPanel {
-        background: #14141f;
-        padding: 25px;
-        margin-top: 40px;
-        border-radius: 15px;
-        display: none;
-        box-shadow: 0 5px 20px rgba(255,76,76,0.4);
-    }
-
-    #adminPanel h2 {
-        color: #ff4c4c;
-        margin-top: 0;
-    }
-
-    #adminPanel input, #adminPanel select, #adminPanel button {
-        padding: 12px;
-        margin: 8px 0;
-        border-radius: 5px;
-        border: none;
-        width: 100%;
-        font-size: 1em;
-    }
-
-    #adminPanel button {
-        background-color: #ff4c4c;
-        color: #fff;
-        cursor: pointer;
-        width: auto;
-        margin-top: 10px;
-    }
-
-    #adminPanel button:hover {
-        background-color: #ff0000;
-    }
-
-    .admin-game-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #2b2b3f;
-        padding: 7px 12px;
-        border-radius: 5px;
-        margin: 5px 0;
-    }
-
-    .admin-game-item button {
-        margin-left: 5px;
-        padding: 5px 10px;
-        font-size: 0.9em;
-    }
-
-    @media(max-width: 600px){
-        header { font-size: 1.7em; padding: 20px; }
-        .game-card a { padding: 8px 12px; }
-    }
-
+/* ===== Responsive ===== */
+@media(max-width:600px){
+    header{font-size:1.7em;padding:20px;}
+    .game-card a{padding:8px 12px;}
+}
 </style>
 </head>
 <body>
 
 <header>Double79 Game Mart</header>
-
 <div class="container">
     <div id="gameList"></div>
 
-    <!-- Admin Panel -->
-    <div id="adminPanel">
-        <h2>Admin Panel</h2>
+    <!-- Add Game Section -->
+    <div class="admin-section" id="addSection" style="display:none;">
+        <h2>Add Game</h2>
         <input type="text" id="gameName" placeholder="Game Name">
         <input type="text" id="gameLink" placeholder="Game Link">
         <input type="text" id="gameImage" placeholder="Image Link">
@@ -168,90 +130,102 @@
             <option value="Horror">Horror</option>
         </select>
         <button onclick="addGame()">Add Game</button>
+    </div>
+
+    <!-- Delete/Edit Section -->
+    <div class="admin-section" id="deleteSection" style="display:none;">
+        <h2>Delete/Edit Games</h2>
         <div id="gameAdminList"></div>
     </div>
 </div>
 
 <script>
-    const adminPassword = "8036";
-    let isAdmin = prompt("Enter admin password for Double79 Game Mart:").trim() === adminPassword;
-    if(isAdmin) document.getElementById("adminPanel").style.display = "block";
+const mainAdminPassword="8036";
+let isAdmin=prompt("Enter Admin Password:").trim()===mainAdminPassword;
+if(isAdmin){
+    document.getElementById("addSection").style.display="block";
+    let deletePW=prompt("Enter password to access Delete/Edit Section:");
+    if(deletePW===mainAdminPassword){
+        document.getElementById("deleteSection").style.display="block";
+    } else alert("Incorrect password for Delete/Edit section.");
+}
 
-    let games = JSON.parse(localStorage.getItem("games")) || [
-        {name:"Sample Action", link:"#", image:"https://via.placeholder.com/200x150", category:"Action"},
-        {name:"Sample Racing", link:"#", image:"https://via.placeholder.com/200x150", category:"Racing"}
-    ];
-    localStorage.setItem("games", JSON.stringify(games));
+let games=JSON.parse(localStorage.getItem("games"))||[
+    {name:"Sample Action",link:"#",image:"https://via.placeholder.com/200x150",category:"Action"},
+    {name:"Sample Racing",link:"#",image:"https://via.placeholder.com/200x150",category:"Racing"}
+];
+localStorage.setItem("games",JSON.stringify(games));
 
-    function renderGames() {
-        const list = document.getElementById("gameList");
-        list.innerHTML = "";
-        games.forEach((game,index)=>{
-            const card = document.createElement("div");
-            card.className = "game-card";
-            card.innerHTML = `
-                <img src="${game.image}" alt="${game.name}">
-                <h3>${game.name}</h3>
-                <span>${game.category}</span><br>
-                <a href="${game.link}" target="_blank">Download</a>
-            `;
-            list.appendChild(card);
-        });
-        if(isAdmin) renderAdminList();
+function renderGames(){
+    const list=document.getElementById("gameList");
+    list.innerHTML="";
+    games.forEach((game,index)=>{
+        const card=document.createElement("div");
+        card.className="game-card";
+        card.innerHTML=`
+            <img src="${game.image}" alt="${game.name}">
+            <h3>${game.name}</h3>
+            <span>${game.category}</span><br>
+            <a href="${game.link}" target="_blank">Download</a>
+        `;
+        list.appendChild(card);
+    });
+    renderAdminList();
+}
+
+function renderAdminList(){
+    const adminList=document.getElementById("gameAdminList");
+    adminList.innerHTML="";
+    if(!document.getElementById("deleteSection").style.display.includes("block")) return;
+    games.forEach((game,index)=>{
+        const div=document.createElement("div");
+        div.className="admin-game-item";
+        div.innerHTML=`${game.name} (${game.category}) 
+            <div>
+                <button onclick="editGame(${index})">Edit</button>
+                <button onclick="deleteGame(${index})">Delete</button>
+            </div>`;
+        adminList.appendChild(div);
+    });
+}
+
+function addGame(){
+    const name=document.getElementById("gameName").value.trim();
+    const link=document.getElementById("gameLink").value.trim();
+    const image=document.getElementById("gameImage").value.trim()||"https://via.placeholder.com/200x150";
+    const category=document.getElementById("gameCategory").value;
+    if(name&&link){
+        games.push({name,link,image,category});
+        localStorage.setItem("games",JSON.stringify(games));
+        renderGames();
+        document.getElementById("gameName").value="";
+        document.getElementById("gameLink").value="";
+        document.getElementById("gameImage").value="";
+    } else alert("Enter Name and Link.");
+}
+
+function deleteGame(index){
+    if(confirm("Delete this game?")){
+        games.splice(index,1);
+        localStorage.setItem("games",JSON.stringify(games));
+        renderGames();
     }
+}
 
-    function renderAdminList(){
-        const adminList = document.getElementById("gameAdminList");
-        adminList.innerHTML = "";
-        games.forEach((game,index)=>{
-            const div = document.createElement("div");
-            div.className="admin-game-item";
-            div.innerHTML = `${game.name} (${game.category}) 
-                <div>
-                    <button onclick="editGame(${index})">Edit</button>
-                    <button onclick="deleteGame(${index})">Delete</button>
-                </div>`;
-            adminList.appendChild(div);
-        });
+function editGame(index){
+    const game=games[index];
+    const newName=prompt("Edit Game Name:",game.name);
+    const newLink=prompt("Edit Game Link:",game.link);
+    const newImage=prompt("Edit Image Link:",game.image);
+    const newCategory=prompt("Edit Category (Action, Racing, Offline, Online, Horror):",game.category);
+    if(newName&&newLink){
+        games[index]={name:newName,link:newLink,image:newImage||"https://via.placeholder.com/200x150",category:newCategory||game.category};
+        localStorage.setItem("games",JSON.stringify(games));
+        renderGames();
     }
+}
 
-    function addGame(){
-        const name = document.getElementById("gameName").value.trim();
-        const link = document.getElementById("gameLink").value.trim();
-        const image = document.getElementById("gameImage").value.trim() || "https://via.placeholder.com/200x150";
-        const category = document.getElementById("gameCategory").value;
-        if(name && link){
-            games.push({name, link, image, category});
-            localStorage.setItem("games", JSON.stringify(games));
-            renderGames();
-            document.getElementById("gameName").value="";
-            document.getElementById("gameLink").value="";
-            document.getElementById("gameImage").value="";
-        } else alert("Please enter Game Name and Link.");
-    }
-
-    function deleteGame(index){
-        if(confirm("Delete this game?")){
-            games.splice(index,1);
-            localStorage.setItem("games", JSON.stringify(games));
-            renderGames();
-        }
-    }
-
-    function editGame(index){
-        const game = games[index];
-        const newName = prompt("Edit Game Name:", game.name);
-        const newLink = prompt("Edit Game Link:", game.link);
-        const newImage = prompt("Edit Image Link:", game.image);
-        const newCategory = prompt("Edit Category (Action, Racing, Offline, Online, Horror):", game.category);
-        if(newName && newLink){
-            games[index] = {name:newName, link:newLink, image:newImage || "https://via.placeholder.com/200x150", category:newCategory || game.category};
-            localStorage.setItem("games", JSON.stringify(games));
-            renderGames();
-        }
-    }
-
-    renderGames();
+renderGames();
 </script>
 
 </body>
