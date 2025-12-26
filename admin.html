@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h1>🔐 Admin Panel</h1>
+
+<div id="loginBox">
+  <input type="password" id="password" placeholder="Enter Admin Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="adminBox" style="display:none;">
+  <input type="text" id="gameName" placeholder="Game Name">
+  <input type="text" id="gameLink" placeholder="Download Link">
+  <button onclick="addGame()">Add Game</button>
+
+  <h2>Manage Games</h2>
+  <div id="adminGameList"></div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
+
+<input type="text" id="gameName" placeholder="Game Name">
+<input type="text" id="gameLink" placeholder="Download Link">
+<input type="text" id="gameImage" placeholder="Image URL">
+<select id="gameCategory">
+  <option value="Action">Action</option>
+  <option value="Racing">Racing</option>
+  <option value="Offline">Offline</option>
+</select>
+
+<button onclick="addGame()">Save Game</button>
