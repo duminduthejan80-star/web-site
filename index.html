@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Game Downloads</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to bottom, #1e1e2f, #2b2b3f);
+        color: #fff;
+    }
+    header {
+        background-color: #14141f;
+        padding: 20px;
+        text-align: center;
+        font-size: 2em;
+        font-weight: bold;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #ff4c4c;
+    }
+    .container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: auto;
+    }
+    #gameList {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+    .game-card {
+        background: #2b2b3f;
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(255,76,76,0.5);
+    }
+    .game-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    .game-card h3 {
+        margin: 0 0 5px 0;
+        color: #ff4c4c;
+    }
+    .game-card span {
+        font-size: 0.85em;
+        color: #aaa;
+    }
+    .game-card a {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 10px;
+        background-color: #ff4c4c;
+        color: #fff;
+        text-decoration: none;
+        transition: background 0.3s;
+        margin-top: 5px;
+    }
+    .game-card a:hover {
+        background-color: #ff0000;
+    }
+    /* ===== Admin Panel ===== */
+    #adminPanel {
+        background: #14141f;
+        padding: 20px;
+        margin-top: 40px;
+        border-radius: 15px;
+        display: none;
+        box-shadow: 0 5px 15px rgba(255,76,76,0.3);
+    }
+    #adminPanel h2 {
+        color: #ff4c4c;
+        margin-top: 0;
+    }
+    #adminPanel input, #adminPanel select, #adminPanel button {
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        border: none;
+        width: 100%;
+    }
+    #adminPanel button {
+        background-color: #ff4c4c;
+        color: #fff;
+        cursor: pointer;
+        width: auto;
+    }
+    #adminPanel button:hover {
+        background-color: #ff0000;
+    }
+    .admin-game-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #2b2b3f;
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin: 5px 0;
+    }
+    .admin-game-item button {
+        margin-left: 5px;
+        padding: 5px 10px;
+    }
+    @media(max-width: 600px){
+        header { font-size: 1.5em; }
+        .game-card a { padding: 8px 12px; }
+    }
+</style>
+</head>
+<body>
+
+<header>Premium Game Downloads</header>
+<div class="container">
+    <div id="gameList"></div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel">
+        <h2>Admin Panel</h2>
+        <input type="text" id="gameName" placeholder="Game Name">
+        <input type="text" id="gameLink" placeholder="Game Link">
+        <input type="text" id="gameImage" placeholder="Image Link">
+        <select id="gameCategory">
+            <option value="Action">Action</option>
+            <option value="Racing">Racing</option>
+            <option value="Offline">Offline</option>
+            <option value="Online">Online</option>
+            <option value="Horror">Horror</option>
+        </select>
+        <button onclick="addGame()">Add Game</button>
+        <div id="gameAdminList"></div>
+    </div>
+</div>
+
+<script>
+    const adminPassword = "8036";
+    let isAdmin = prompt("Enter admin password (8036)").trim() === adminPassword;
+    if(isAdmin) document.getElementById("adminPanel").style.display = "block";
+
+    let games = JSON.parse(localStorage.getItem("games")) || [
+        {name:"Sample Action", link:"#", image:"https://via.placeholder.com/200x150", category:"Action"},
+        {name:"Sample Racing", link:"#", image:"https://via.placeholder.com/200x150", category:"Racing"}
+    ];
+    localStorage.setItem("games", JSON.stringify(games));
+
+    function renderGames() {
+        const list = document.getElementById("gameList");
+        list.innerHTML = "";
+        games.forEach((game,index)=>{
+            const card = document.createElement("div");
+            card.className = "game-card";
+            card.innerHTML = `
+                <img src="${game.image}" alt="${game.name}">
+                <h3>${game.name}</h3>
+                <span>${game.category}</span><br>
+                <a href="${game.link}" target="_blank">Download</a>
+            `;
+            list.appendChild(card);
+        });
+        if(isAdmin) renderAdminList();
+    }
+
+    function renderAdminList(){
+        const adminList = document.getElementById("gameAdminList");
+        adminList.innerHTML = "";
+        games.forEach((game,index)=>{
+            const div = document.createElement("div");
+            div.className="admin-game-item";
+            div.innerHTML = `${game.name} (${game.category}) 
+                <div>
+                    <button onclick="editGame(${index})">Edit</button>
+                    <button onclick="deleteGame(${index})">Delete</button>
+                </div>`;
+            adminList.appendChild(div);
+        });
+    }
+
+    function addGame(){
+        const name = document.getElementById("gameName").value.trim();
+        const link = document.getElementById("gameLink").value.trim();
+        const image = document.getElementById("gameImage").value.trim() || "https://via.placeholder.com/200x150";
+        const category = document.getElementById("gameCategory").value;
+        if(name && link){
+            games.push({name, link, image, category});
+            localStorage.setItem("games", JSON.stringify(games));
+            renderGames();
+            document.getElementById("gameName").value="";
+            document.getElementById("gameLink").value="";
+            document.getElementById("gameImage").value="";
+        } else alert("Enter name and link.");
+    }
+
+    function deleteGame(index){
+        if(confirm("Delete this game?")){
+            games.splice(index,1);
+            localStorage.setItem("games", JSON.stringify(games));
+            renderGames();
+        }
+    }
+
+    function editGame(index){
+        const game = games[index];
+        const newName = prompt("Edit Game Name:", game.name);
+        const newLink = prompt("Edit Game Link:", game.link);
+        const newImage = prompt("Edit Image Link:", game.image);
+        const newCategory = prompt("Edit Category (Action, Racing, Offline, Online, Horror):", game.category);
+        if(newName && newLink){
+            games[index]={name:newName,link:newLink,image:newImage || "https://via.placeholder.com/200x150", category:newCategory || game.category};
+            localStorage.setItem("games", JSON.stringify(games));
+            renderGames();
+        }
+    }
+
+    renderGames();
+</script>
+
+</body>
+</html>
