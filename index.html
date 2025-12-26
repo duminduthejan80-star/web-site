@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Game Downloads</title>
+<style>
+    /* ===== Body ===== */
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to bottom, #1e1e2f, #2b2b3f);
+        color: #fff;
+    }
+
+    /* ===== Header ===== */
+    header {
+        background-color: #14141f;
+        padding: 20px;
+        text-align: center;
+        font-size: 2em;
+        font-weight: bold;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #ff4c4c;
+    }
+
+    /* ===== Container ===== */
+    .container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    /* ===== Game Cards ===== */
+    #gameList {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .game-card {
+        background: #2b2b3f;
+        border-radius: 15px;
+        padding: 15px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(255, 76, 76, 0.5);
+    }
+
+    .game-card h3 {
+        margin: 0 0 15px 0;
+        color: #ff4c4c;
+    }
+
+    .game-card a {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 10px;
+        background-color: #ff4c4c;
+        color: #fff;
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+
+    .game-card a:hover {
+        background-color: #ff0000;
+    }
+
+    /* ===== Admin Panel ===== */
+    #adminPanel {
+        background: #14141f;
+        padding: 15px;
+        margin-top: 40px;
+        border-radius: 15px;
+        display: none;
+    }
+
+    #adminPanel input, #adminPanel button {
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        border: none;
+    }
+
+    #adminPanel input {
+        width: 80%;
+    }
+
+    #adminPanel button {
+        background-color: #ff4c4c;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    #adminPanel button:hover {
+        background-color: #ff0000;
+    }
+
+    /* ===== Responsive ===== */
+    @media(max-width: 600px){
+        header {
+            font-size: 1.5em;
+        }
+        .game-card a {
+            padding: 8px 12px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<header>Premium Game Downloads</header>
+<div class="container">
+    <div id="gameList"></div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel">
+        <h2>Admin Panel</h2>
+        <input type="text" id="gameName" placeholder="Game Name">
+        <input type="text" id="gameLink" placeholder="Game Link">
+        <button onclick="addGame()">Add Game</button>
+        <div id="gameAdminList"></div>
+    </div>
+</div>
+
+<script>
+    const adminPassword = "8036";
+
+    // ===== Check for admin password =====
+    let isAdmin = prompt("Enter admin password (8036 for admin)").trim() === adminPassword;
+    if(isAdmin) document.getElementById("adminPanel").style.display = "block";
+
+    // ===== LocalStorage setup =====
+    let games = JSON.parse(localStorage.getItem("games")) || [
+        {name: "Sample Game 1", link: "https://example.com/game1"},
+        {name: "Sample Game 2", link: "https://example.com/game2"}
+    ];
+    localStorage.setItem("games", JSON.stringify(games));
+
+    function renderGames() {
+        const list = document.getElementById("gameList");
+        list.innerHTML = "";
+        games.forEach((game,index)=>{
+            const card = document.createElement("div");
+            card.className = "game-card";
+            card.innerHTML = `<h3>${game.name}</h3><a href="${game.link}" target="_blank">Download</a>`;
+            list.appendChild(card);
+        });
+        if(isAdmin) renderAdminList();
+    }
+
+    // ===== Admin Functions =====
+    function renderAdminList(){
+        const adminList = document.getElementById("gameAdminList");
+        adminList.innerHTML = "";
+        games.forEach((game,index)=>{
+            const div = document.createElement("div");
+            div.style.margin="5px 0";
+            div.innerHTML = `${game.name} 
+                <button onclick="deleteGame(${index})">Delete</button>`;
+            adminList.appendChild(div);
+        });
+    }
+
+    function addGame(){
+        const name = document.getElementById("gameName").value.trim();
+        const link = document.getElementById("gameLink").value.trim();
+        if(name && link){
+            games.push({name,link});
+            localStorage.setItem("games", JSON.stringify(games));
+            renderGames();
+            document.getElementById("gameName").value="";
+            document.getElementById("gameLink").value="";
+        } else alert("Please enter both name and link.");
+    }
+
+    function deleteGame(index){
+        if(confirm("Delete this game?")){
+            games.splice(index,1);
+            localStorage.setItem("games", JSON.stringify(games));
+            renderGames();
+        }
+    }
+
+    renderGames();
+</script>
+
+</body>
+</html>
